@@ -28,7 +28,7 @@ st.set_page_config(page_title="CassaDoc", page_icon=":page_with_curl:", layout="
 
 if st.session_state['loggedIn'] == True: 
     st.title("Account Profile")
-    
+    st.info("Account features coming soon")
 
 else:
     st.error("Login Required to use this page")
