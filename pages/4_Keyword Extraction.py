@@ -10,7 +10,11 @@ from heapq import nlargest
 import yake
 import pandas as pd
 
-
+st.set_page_config(page_title="CassaDoc", page_icon=":page_with_curl:", layout="wide",initial_sidebar_state="collapsed",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+})
 
 firebaseConfig = {
   'apiKey': "AIzaSyA3WPDfbN3X1CnuP1CtFv03dIM-ziN0_pA",
