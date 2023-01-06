@@ -1,6 +1,5 @@
 import streamlit as st
 import pyrebase
-import streamlit as st
 import spacy
 from spacy import displacy
 from spacy.lang.en.stop_words import STOP_WORDS
@@ -8,13 +7,13 @@ from string import punctuation
 from collections import Counter
 from heapq import nlargest
 import yake
-import pandas as pd
 
 st.set_page_config(page_title="CassaDoc", page_icon=":page_with_curl:", layout="wide",initial_sidebar_state="collapsed",
     menu_items={
         'Get Help': 'https://www.extremelycoolapp.com/help',
         'Report a bug': "https://www.extremelycoolapp.com/bug",
 })
+
 
 firebaseConfig = {
   'apiKey': "AIzaSyA3WPDfbN3X1CnuP1CtFv03dIM-ziN0_pA",
@@ -36,8 +35,7 @@ nlp = spacy.load("en_core_web_md")
 
 if st.session_state['loggedIn'] == True:
 
-    def extract_named_entities(text):
-        
+    def extract_named_entities(text):        
         doc = nlp(text)
         ent_html = displacy.render(doc, style='ent', jupyter=False)
         st.markdown(ent_html, unsafe_allow_html=True)
@@ -115,17 +113,18 @@ if st.session_state['loggedIn'] == True:
                 elif option == "Text Summarization":
                     show_summary(text,summary_length)
 
+
                 elif option == "Keyword Extraction":
                     keywords = extract_keywords(text)
                     for kw in keywords[:num_keywords]:
                         st.success(kw)
 
 
-if __name__ == "__main__":
-    main()
+    if __name__ == "__main__":
+        main()
 
 
 else:
-    st.error("Login Required to use this page")
+    st.error("Login required to use this page")
 
 
