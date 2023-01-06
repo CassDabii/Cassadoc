@@ -1,8 +1,5 @@
-import requests
 import pyrebase
-import streamlit_authenticator as stauth
 import streamlit as st
-import extra_streamlit_components as stx
 import re
 
 st.set_page_config(page_title="CASSADOC", page_icon=":page_with_curl:", layout="wide",initial_sidebar_state="collapsed",
