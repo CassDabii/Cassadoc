@@ -4,6 +4,12 @@ import streamlit as st
 from fpdf import FPDF
 import base64
 
+st.set_page_config(page_title="CassaDoc", page_icon=":page_with_curl:", layout="wide",initial_sidebar_state="collapsed",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+})
+
 class Subheading:
         def __init__(self, name, font, text):
             self.name = name
