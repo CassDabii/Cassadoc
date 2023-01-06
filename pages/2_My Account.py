@@ -22,6 +22,7 @@ storage = firebase.storage()
 
 if st.session_state['loggedIn'] == True: 
     st.title("Account Profile")
+    
 
 else:
     st.error("Login Required to use this page")
