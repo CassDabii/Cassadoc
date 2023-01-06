@@ -1,5 +1,11 @@
 import streamlit as st  # pip install streamlit
 
+st.set_page_config(page_title="CassaDoc", page_icon=":page_with_curl:", layout="wide",initial_sidebar_state="collapsed",
+    menu_items={
+        'Get Help': 'https://www.extremelycoolapp.com/help',
+        'Report a bug': "https://www.extremelycoolapp.com/bug",
+})
+
 st.header(":mailbox: Contact Me")
 
 
