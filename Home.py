@@ -2,7 +2,7 @@ import pyrebase
 import streamlit as st
 import re
 
-st.set_page_config(page_title="CASSADOC", page_icon=":page_with_curl:", layout="wide",initial_sidebar_state="collapsed",
+st.set_page_config(page_title="CassaDoc", page_icon=":page_with_curl:", layout="wide",initial_sidebar_state="collapsed",
     menu_items={
         'Get Help': 'https://www.extremelycoolapp.com/help',
         'Report a bug': "https://www.extremelycoolapp.com/bug",
@@ -55,9 +55,6 @@ def mainpage():
 
 def login_form():
     with loginSection:
-        # Clear cache to remove previously displayed login forms
-        loginSection.empty()
-
         # Get the form selected by the user
         form = st.selectbox("Choose an option: ", ["Login", "Create account", "Reset password"])
 
@@ -94,6 +91,11 @@ def login_form():
                 # Check if email is valid
                 if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
                     st.error("Invalid email")
+                    return
+
+                # Check if password meets criteria (8 characters, 1 capital letter, 1 special character)
+                if not (any(c.isupper() for c in password) and any(c.isdigit() for c in password) and len(password) >= 8):
+                    st.error("Password must be at least 8 characters long and contain at least 1 capital letter and 1 special character")
                     return
 
                 # Try to create a new account with email and password
@@ -133,9 +135,8 @@ def login_form():
 
 # Create a function to handle logging out
 def logout():
-    headerSection.empty();
     st.session_state['loggedIn'] = False
-    st.success("Logged out")
+    st.success("Logged Out")
 
 def show_logout_button():
     with st.sidebar:
@@ -146,8 +147,10 @@ with headerSection:
     #first run will have nothing in session_state
     if 'loggedIn' not in st.session_state:
         st.session_state['loggedIn'] = False
-    if st.session_state['loggedIn']:
-        show_logout_button()
-        mainpage()
-    else:
         login_form()
+    else:
+        if st.session_state['loggedIn']:
+            show_logout_button()
+            mainpage()
+        else:
+            login_form()
