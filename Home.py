@@ -53,90 +53,83 @@ def mainpage():
             st.write("This app was made to provide a simple and efficient way for users to create professional-quality technical specifications. By streamlining the specification creation process, " +
              "users can save time and effort and focus on other important tasks. The app's keyword extraction function can also be a useful tool for extracting key words and concepts from text and PDF documents.")
 
+def login(email, password):
+        try:
+            user = auth.sign_in_with_email_and_password(email, password)
+        except Exception as e:
+            st.error(str(e))
+        else:
+            st.session_state['loggedIn'] = True
+            
+
+def create_account(email, password, password_confirm):
+
+
+    if st.button("Create Account"):
+        if password != password_confirm:
+            st.error("Passwords do not match")
+            return
+
+        if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            st.error("Invalid email")
+            return
+
+        if not (any(c.isupper() for c in password) and any(c.isdigit() for c in password) and len(password) >= 8):
+            st.error("Password must be at least 8 characters long and contain at least 1 capital letter and 1 special character")
+            return
+
+        try:
+            user = auth.create_user_with_email_and_password(email, password)
+        except Exception as e:
+            if "EMAIL_EXISTS" in str(e):
+                st.error("A user with this email already exists")
+            else:
+                st.error(e)
+        else:
+            try:
+                account_info = auth.get_account_info(user['idToken'])
+            except Exception as e:
+                st.error("Account not created: {}".format(e))
+            else:
+                st.success("Account created for {}".format(email))
+
+
+def reset_password(email):
+    if st.button("Reset password"):
+        try:
+            auth.send_password_reset_email(email)
+        except Exception as e:
+            st.error(str(e))
+        else:
+            st.success("Password reset email sent")
+
+    # Additional code goes here
+    st.text("Please check your email for further instructions on resetting your password.")
+
+
 def login_form():
     with loginSection:
-        # Get the form selected by the user
-        form = st.selectbox("Choose an option: ", ["Login", "Create account", "Reset password"])
+        if st.session_state['loggedIn'] == False:
+            form = st.selectbox("Choose an option: ", ["Login", "Create account", "Reset password"])
 
-        if form == "Login":
-                # Get email and password from the user
+            if form == "Login":
                 email = st.text_input("Email")
                 password = st.text_input("Password", type='password')
+                st.button ("Login", on_click=login, args= (email, password))
+            elif form == "Create account":
+                email = st.text_input("Email")
+                password = st.text_input("Password", type='password')
+                password_confirm = st.text_input("Confirm password", type='password')
+                st.button ("Create account", on_click=create_account, args= (email, password, password_confirm))
 
-                # Try to sign in with email and password
-                if st.button("Login"):
-                    try:
-                        user = auth.sign_in_with_email_and_password(email, password)
-                    except Exception as e:
-                        # Display error message
-                        st.error(str(e))
-                    else:
-                        # Sign-in successful
-                        st.success("Sign-in successful")
-                        # Update session state
-                        st.session_state['loggedIn'] = True
-
-        elif form == "Create account":
-            # Get email, password, and password confirmation from the user
-            email = st.text_input("Email")
-            password = st.text_input("Password", type='password')
-            password_confirm = st.text_input("Confirm password", type='password')
-
-            if st.button("Create Account"):
-                # Check if passwords match
-                if password != password_confirm:
-                    st.error("Passwords do not match")
-                    return
-
-                # Check if email is valid
-                if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-                    st.error("Invalid email")
-                    return
-
-                # Check if password meets criteria (8 characters, 1 capital letter, 1 special character)
-                if not (any(c.isupper() for c in password) and any(c.isdigit() for c in password) and len(password) >= 8):
-                    st.error("Password must be at least 8 characters long and contain at least 1 capital letter and 1 special character")
-                    return
-
-                # Try to create a new account with email and password
-                try:
-                    user = auth.create_user_with_email_and_password(email, password)
-                except Exception as e:
-                    if "EMAIL_EXISTS" in str(e):
-                        st.error("A user with this email already exists")
-                    else:
-                        st.error(e)
-                else:
-                    # Check if account was created
-                    try:
-                        account_info = auth.get_account_info(user['idToken'])
-                    except Exception as e:
-                        st.error("Account not created: {}".format(e))
-                    else:
-                        st.success("Account created for {}".format(email))
-
-
-        elif form == "Reset password":
-            # Get email from the user
-            email = st.text_input("Email")
-            if st.button("Reset password"):
-                
-
-                # Try to reset the password for the given email
-                try:
-                    auth.send_password_reset_email(email)
-                except Exception as e:
-                    # Display error message
-                    st.error(str(e))
-                else:
-                    # Password reset email sent successfully
-                    st.success("Password reset email sent")
+            elif form == "Reset password":
+                email = st.text_input("Email")
+                st.button ("Reset Password", on_click=reset_password, args= (email))
 
 
 # Create a function to handle logging out
 def logout():
     st.session_state['loggedIn'] = False
-    st.success("Logged Out")
 
 def show_logout_button():
     with st.sidebar:
