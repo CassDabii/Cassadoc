@@ -1,0 +1,2 @@
+# Cassadoc
+As the first software solution under CassaCorp this web solution is a design document creation tool built with Python, Streamlit, CSS, JavaScript, Google Firebase. It allows users to create documents using a modular approach and includes aiding features for analysing text with NLP techniques such as entity recognition, sentiment analysis, keyword extraction, and summarisation. The completed document can be exported as a PDF.
